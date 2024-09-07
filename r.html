@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Speech Recognition</title>
+  </head>
+  <body>
+    <!-- Sidebar -->
+    <div
+      id="side"
+      style="
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 200px;
+        height: 100%;
+        background-color: #333;
+        color: #fff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        padding: 20px;
+        box-shadow: 2px 0 5px rgba(0, 0, 0, 0.3);
+      "
+    >
+      <button id="new">New chat</button>
+    </div>
+
+    <!-- Speech recognition box at the bottom-center -->
+    <div
+      id="spokenText"
+      style="
+        position: fixed;
+        bottom: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        border: 1px solid #ccc;
+        padding: 10px;
+        width: 300px;
+        min-height: 50px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        background-color: white;
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+      "
+    >
+      <!-- Microphone button with black color -->
+      <button
+        id="btnSpeak"
+        style="
+          background-color: transparent;
+          border: none;
+          cursor: pointer;
+          margin-right: 10px;
+        "
+      >
+        <img
+          src="https://www.svgrepo.com/show/1902/microphone.svg"
+          alt="Microphone Icon"
+          width="24"
+          height="24"
+        />
+      </button>
+
+      <!-- Recognized speech text appears here -->
+      <span id="textContent"></span>
+    </div>
+
+    <script>
+      var spokenText = document.querySelector("#textContent");
+
+      var SpeechRecognition = SpeechRecognition || webkitSpeechRecognition;
+      var recognition = new SpeechRecognition();
+      recognition.lang = "en-US";
+      recognition.interimResults = false;
+
+      recognition.onresult = function (event) {
+        var last = event.results.length - 1;
+        var command = event.results[last][0].transcript;
+        spokenText.textContent = command;
+      };
+
+      recognition.onspeechend = function () {
+        recognition.stop();
+      };
+
+      recognition.onerror = function (event) {
+        spokenText.textContent = "Error occurred: " + event.error;
+      };
+
+      document
+        .querySelector("#btnSpeak")
+        .addEventListener("click", function () {
+          recognition.start();
+        });
+    </script>
+  </body>
+</html>
