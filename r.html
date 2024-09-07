@@ -7,7 +7,7 @@
     <title>Speech Recognition</title>
   </head>
   <body>
-    <!-- Sidebar -->
+    <!-- Sidebar for new chats and old chats  -->
     <div
       id="side"
       style="
@@ -37,6 +37,7 @@
         bottom: 20px;
         left: 50%;
         transform: translateX(-50%);
+
         border: 1px solid #ccc;
         padding: 10px;
         width: 300px;
@@ -48,7 +49,7 @@
         box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
       "
     >
-      <!-- Microphone button with black color -->
+      <!-- Microphone img redirected from svg  -->
       <button
         id="btnSpeak"
         style="
@@ -66,7 +67,7 @@
         />
       </button>
 
-      <!-- Recognized speech text appears here -->
+      <!-- text will appear here  -->
       <span id="textContent"></span>
     </div>
 
@@ -75,26 +76,28 @@
 
       var SpeechRecognition = SpeechRecognition || webkitSpeechRecognition;
       var recognition = new SpeechRecognition();
-      recognition.lang = "en-US";
-      recognition.interimResults = false;
+      recognition.lang = "en-IND";
+      recognition.interimResults = true;
+      //interimResults if true so the text will appear while speaking
 
       recognition.onresult = function (event) {
-        var last = event.results.length - 1;
+        var last = event.results.length - 1; //result's last element
         var command = event.results[last][0].transcript;
         spokenText.textContent = command;
       };
 
       recognition.onspeechend = function () {
-        recognition.stop();
+        recognition.stop(); //once stop speaking recognition of the voice will stop
       };
 
       recognition.onerror = function (event) {
-        spokenText.textContent = "Error occurred: " + event.error;
+        spokenText.textContent = "Error occurred: " + event.error; //if any error
       };
 
       document
         .querySelector("#btnSpeak")
         .addEventListener("click", function () {
+          //when click on the mic  then it should start recognizing
           recognition.start();
         });
     </script>
